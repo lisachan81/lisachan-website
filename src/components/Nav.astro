@@ -1,0 +1,73 @@
+---
+interface Props {
+  currentPath?: string;
+}
+const { currentPath = '/' } = Astro.props;
+const isHome = currentPath === '/';
+---
+
+<nav>
+  <a href="/" class="nav-logo">Lisa Chan</a>
+  <ul class="nav-links">
+    {isHome ? (
+      <>
+        <li><a href="#about">About</a></li>
+        <li><a href="#experience">Experience</a></li>
+        <li><a href="#writing">Writing</a></li>
+        <li><a href="#featured">Featured</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </>
+    ) : (
+      <>
+        <li><a href="/#about">About</a></li>
+        <li><a href="/#experience">Experience</a></li>
+        <li><a href="/writing">Writing</a></li>
+        <li><a href="/#featured">Featured</a></li>
+        <li><a href="/#contact">Contact</a></li>
+      </>
+    )}
+  </ul>
+</nav>
+
+<style>
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: var(--nav-height);
+    background: rgba(232, 230, 220, 0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--ink-faint);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 var(--site-padding);
+    z-index: 100;
+  }
+
+  .nav-logo {
+    font-family: var(--serif);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--ink);
+    text-decoration: none;
+    letter-spacing: -0.01em;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: var(--ink-muted);
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--terracotta); }
+</style>

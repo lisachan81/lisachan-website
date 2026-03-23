@@ -1,0 +1,103 @@
+---
+// Add your talks and press links here.
+// Each item: { type: 'Talk' | 'Press', title, venue, year, url }
+const items = [
+  {
+    type: 'Talk',
+    title: 'Your Talk Title Here',
+    venue: 'Conference / Event Name',
+    year: '2024',
+    url: '#',
+  },
+  {
+    type: 'Press',
+    title: 'Your Article or Press Release Title Here',
+    venue: 'Publication Name',
+    year: '2023',
+    url: '#',
+  },
+  {
+    type: 'Talk',
+    title: 'Another Talk Title Here',
+    venue: 'Conference / Event Name',
+    year: '2022',
+    url: '#',
+  },
+];
+---
+
+<section id="featured">
+  <div class="section-inner">
+    <p class="section-label">Featured</p>
+    <h2 class="section-heading">Talks &amp; press.</h2>
+    <div class="list">
+      {items.map(item => (
+        <a href={item.url} target="_blank" rel="noopener noreferrer" class="item">
+          <span class="type">{item.type}</span>
+          <span class="detail">
+            <span class="title">{item.title}</span>
+            <span class="venue">{item.venue}</span>
+          </span>
+          <span class="year">{item.year}</span>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .list { display: flex; flex-direction: column; }
+
+  .item {
+    display: grid;
+    grid-template-columns: 100px 1fr auto;
+    align-items: baseline;
+    gap: 2rem;
+    padding: 1.5rem 0;
+    border-top: 1px solid var(--ink-faint);
+    text-decoration: none;
+    color: var(--ink);
+    transition: color 0.2s;
+  }
+
+  .item:last-child { border-bottom: 1px solid var(--ink-faint); }
+  .item:hover .title { color: var(--terracotta); }
+
+  .type {
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--terracotta);
+  }
+
+  .detail {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .title {
+    font-family: var(--serif);
+    font-size: 1.0625rem;
+    font-weight: 600;
+    line-height: 1.35;
+    transition: color 0.2s;
+  }
+
+  .venue {
+    font-size: 0.8125rem;
+    color: var(--ink-muted);
+  }
+
+  .year {
+    font-size: 0.8rem;
+    color: var(--ink-muted);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 600px) {
+    .item { grid-template-columns: 80px 1fr; }
+    .year { display: none; }
+  }
+</style>

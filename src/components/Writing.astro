@@ -1,0 +1,89 @@
+---
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('writing');
+const posts = allPosts
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
+
+function formatDate(date: Date) {
+  return date.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' });
+}
+---
+
+<section id="writing">
+  <div class="section-inner">
+    <p class="section-label">Writing</p>
+    <h2 class="section-heading">Thinking out loud.</h2>
+    <div class="grid">
+      {posts.map(post => (
+        <a href={`/writing/${post.id}`} class="card">
+          <p class="date">{formatDate(post.data.date)}</p>
+          <h3>{post.data.title}</h3>
+          <p class="excerpt">{post.data.excerpt}</p>
+        </a>
+      ))}
+    </div>
+    {allPosts.length > 3 && (
+      <a href="/writing" class="see-all">All posts →</a>
+    )}
+  </div>
+</section>
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+
+  .card {
+    display: block;
+    padding: 2rem;
+    background: var(--cream-dark);
+    border-top: 3px solid transparent;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.2s;
+  }
+
+  .card:hover { border-color: var(--terracotta); }
+
+  .date {
+    font-size: 0.75rem;
+    color: var(--ink-muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+
+  h3 {
+    font-family: var(--serif);
+    font-size: 1.125rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--ink);
+    margin-bottom: 0.75rem;
+  }
+
+  .excerpt {
+    font-size: 0.875rem;
+    color: var(--ink-muted);
+    line-height: 1.65;
+  }
+
+  .see-all {
+    display: inline-block;
+    margin-top: 2rem;
+    font-size: 0.875rem;
+    color: var(--terracotta);
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    border-bottom: 1px solid var(--terracotta);
+    padding-bottom: 2px;
+  }
+
+  @media (max-width: 700px) {
+    .grid { grid-template-columns: 1fr; }
+  }
+</style>

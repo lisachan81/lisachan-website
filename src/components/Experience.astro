@@ -1,0 +1,102 @@
+---
+const roles = [
+  {
+    company: 'PETRONAS Digital',
+    years: '2014 — Present',
+    title: 'Head of Solutions Delivery',
+    body: 'Lead a division that ships software for the PETRONAS Group — functioning like an internal app store for frontliners at the plant and office workers driving productivity. Roles across the organisation have covered IT transformation, cloud migration, Agile and DevOps adoption, software development, product management, plant systems, and ERP.',
+    tags: ['DevOps', 'Cloud Migration', 'Product Management', 'Agile', 'ERP', 'Plant Systems'],
+  },
+  {
+    company: 'Accenture',
+    years: '2004 — 2014',
+    title: 'Talent & Organisation Lead, Malaysia',
+    body: 'Led the Talent & Organisation service line for Accenture Malaysia — a team of 60–80 consultants specialising in HR transformation, learning & development, talent management, and change management. Clients spanned oil & gas, airlines, and shared services.',
+    tags: ['HR Transformation', 'Change Management', 'L&D', 'Oil & Gas'],
+  },
+];
+---
+
+<section id="experience">
+  <div class="section-inner">
+    <p class="section-label">Experience</p>
+    <h2 class="section-heading">Where I've worked.</h2>
+    {roles.map(role => (
+      <div class="role">
+        <div class="meta">
+          <p class="company">{role.company}</p>
+          <p class="years">{role.years}</p>
+        </div>
+        <div class="detail">
+          <h3>{role.title}</h3>
+          <p class="body">{role.body}</p>
+          <div class="tags">
+            {role.tags.map(tag => <span class="tag">{tag}</span>)}
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
+
+<style>
+  .role {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 3rem;
+    padding: 2.5rem 0;
+    border-top: 1px solid var(--ink-faint);
+  }
+
+  .role:last-child { border-bottom: 1px solid var(--ink-faint); }
+
+  .company {
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+
+  .years {
+    font-size: 0.8rem;
+    color: var(--ink-muted);
+    margin-top: 0.25rem;
+  }
+
+  h3 {
+    font-family: var(--serif);
+    font-size: 1.375rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 0.75rem;
+    line-height: 1.2;
+  }
+
+  .body {
+    font-size: 0.9375rem;
+    line-height: 1.75;
+    color: var(--ink);
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .tag {
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.75rem;
+    background: var(--terracotta-light);
+    color: var(--terracotta);
+  }
+
+  @media (max-width: 700px) {
+    .role { grid-template-columns: 1fr; gap: 0.75rem; }
+  }
+</style>

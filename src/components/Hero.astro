@@ -1,0 +1,89 @@
+---
+---
+
+<section id="hero">
+  <p class="eyebrow">Head of Solutions Delivery · PETRONAS Digital</p>
+  <h1>Lisa Chan</h1>
+  <p class="tagline">I build the systems that make work actually work.</p>
+  <div class="cta-group">
+    <a href="#experience" class="btn-primary">View my work →</a>
+    <a href="#contact" class="btn-secondary">Get in touch</a>
+  </div>
+</section>
+
+<style>
+  section {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: calc(var(--nav-height) + 2rem) var(--site-padding) 4rem;
+    max-width: var(--max-width);
+    margin: 0 auto;
+  }
+
+  .eyebrow {
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--terracotta);
+    margin-bottom: 1.5rem;
+  }
+
+  h1 {
+    font-family: var(--serif);
+    font-size: clamp(3rem, 8vw, 6rem);
+    font-weight: 600;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin-bottom: 1rem;
+  }
+
+  .tagline {
+    font-family: var(--serif);
+    font-size: clamp(0.95rem, 1.5vw, 1.125rem);
+    font-style: italic;
+    font-weight: 400;
+    color: var(--ink-muted);
+    margin-bottom: 3rem;
+    line-height: 1.5;
+  }
+
+  .cta-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    background: var(--terracotta);
+    color: white;
+    text-decoration: none;
+    padding: 0.875rem 2rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+
+  .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    color: var(--ink);
+    text-decoration: none;
+    padding: 0.875rem 2rem;
+    font-size: 0.875rem;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    border: 1px solid var(--ink-faint);
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .btn-secondary:hover { border-color: var(--terracotta); color: var(--terracotta); }
+</style>

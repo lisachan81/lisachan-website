@@ -1,0 +1,116 @@
+---
+---
+
+<section id="about">
+  <div class="section-inner">
+    <p class="section-label">About</p>
+    <div class="grid">
+      <div class="main">
+        <h2 class="section-heading">Twenty-one years of fixing the hard stuff.</h2>
+        <p class="subtitle">Delivery Lead · Problem Solver · Recovering Consultant</p>
+        <div class="body">
+          <p>
+            I started my career at Accenture, spending a decade in Talent &amp; Organisation —
+            helping large companies figure out how their people, processes, and systems fit together.
+            It turns out that's just another way of saying: I fixed things that were quietly broken.
+          </p>
+          <p>
+            At PETRONAS Digital, I found a bigger canvas. I've held roles across IT transformation,
+            cloud migration, DevOps, software development, product management, plant systems, and ERP.
+            Today I lead Solutions Delivery — a division that functions like an internal app store,
+            shipping products that real people depend on every day.
+          </p>
+          <p>
+            Outside work, I'm active in tech communities as a DevOps Ambassador, mentor with
+            Girls4Girls, and a regular speaker at technology events locally and internationally.
+          </p>
+        </div>
+      </div>
+
+      <aside>
+        <div class="sidebar-block">
+          <h4>Education</h4>
+          <ul>
+            <li>BEng Chemical Engineering · University of York, 2003</li>
+            <li>MSc Management · London School of Economics, 2004</li>
+          </ul>
+        </div>
+        <div class="sidebar-block">
+          <h4>Community</h4>
+          <ul>
+            <li>DevOps Ambassador</li>
+            <li>Women Who Code</li>
+            <li>Girls4Girls (G4G) Mentor</li>
+            <li>Tech Conference Speaker</li>
+          </ul>
+        </div>
+        <div class="sidebar-block">
+          <h4>Expertise</h4>
+          <ul>
+            <li>Engineering Transformation</li>
+            <li>Cloud Migration</li>
+            <li>DevOps &amp; Agile Delivery</li>
+            <li>Product Management</li>
+            <li>Organisational Change</li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<style>
+  section { background: var(--cream); }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  .subtitle {
+    font-family: var(--serif);
+    font-size: clamp(0.875rem, 1.2vw, 1rem);
+    font-style: italic;
+    font-weight: 400;
+    color: var(--ink-muted);
+    margin-bottom: 1.75rem;
+    line-height: 1.4;
+  }
+
+  .body {
+    font-size: 1.0625rem;
+    line-height: 1.8;
+  }
+
+  .body p + p { margin-top: 1.25rem; }
+
+  aside { display: flex; flex-direction: column; gap: 2rem; }
+
+  .sidebar-block h4 {
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--ink-faint);
+  }
+
+  .sidebar-block ul { list-style: none; }
+
+  .sidebar-block li {
+    font-size: 0.9375rem;
+    color: var(--ink);
+    padding: 0.35rem 0;
+    border-bottom: 1px solid var(--ink-faint);
+  }
+
+  .sidebar-block li:last-child { border-bottom: none; }
+
+  @media (max-width: 700px) {
+    .grid { grid-template-columns: 1fr; gap: 3rem; }
+  }
+</style>

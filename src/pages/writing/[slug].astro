@@ -1,0 +1,92 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('writing');
+  return posts.map(post => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+function formatDate(date: Date) {
+  return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+}
+---
+
+<BaseLayout title={`${post.data.title} — Lisa Chan`} description={post.data.excerpt}>
+  <Nav currentPath="/writing" />
+  <main>
+    <article>
+      <header>
+        <a href="/#writing" class="back">← Writing</a>
+        <p class="date">{formatDate(post.data.date)}</p>
+        <h1>{post.data.title}</h1>
+        <p class="excerpt">{post.data.excerpt}</p>
+      </header>
+      <div class="post-body">
+        <Content />
+      </div>
+    </article>
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style>
+  main {
+    padding-top: var(--nav-height);
+  }
+
+  article {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: clamp(3rem, 8vw, 6rem) var(--site-padding);
+  }
+
+  .back {
+    display: inline-block;
+    font-size: 0.875rem;
+    color: var(--ink-muted);
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    margin-bottom: 2.5rem;
+    transition: color 0.2s;
+  }
+
+  .back:hover { color: var(--terracotta); }
+
+  .date {
+    font-size: 0.75rem;
+    color: var(--ink-muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+
+  h1 {
+    font-family: var(--serif);
+    font-size: clamp(1.75rem, 4vw, 3rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    color: var(--ink);
+    margin-bottom: 1rem;
+  }
+
+  .excerpt {
+    font-family: var(--serif);
+    font-size: 1.125rem;
+    font-style: italic;
+    color: var(--ink-muted);
+    margin-bottom: 3rem;
+    line-height: 1.5;
+    padding-bottom: 3rem;
+    border-bottom: 1px solid var(--ink-faint);
+  }
+</style>
