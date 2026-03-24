@@ -12,7 +12,7 @@ Be prescriptive about what needs to get done, so that work actually gets done
 Give guidance, let them figure it out and leave them to get it done
 Depending on just how much of a control freak they are, some bosses may never change their approach. But in my opinion, there is generally a preference for #1 for low competency-low trust teams and a preference for #2 for high competency-high trust teams.
 
-Like so. 👆 There's this notion that if you give incompetent people too much control, then you're going to have a dumpster fire on your hands. But if you take away control from super competent people, you stifle their innovation and they lose the will to live.
+There's this notion that if you give incompetent people too much control, then you're going to have a dumpster fire on your hands. But if you take away control from super competent people, you stifle their innovation and they lose the will to live.
 
 Most leaders didn't get to where they are by messing up, so most tend to err on the side of caution and stay in the "suffocating inefficiency" under the line segment. This is a very comfortable and seductive place to be, despite its obvious productivity costs.
 
@@ -20,7 +20,7 @@ Firstly, it's great for the economy. Living in control town creates all sorts of
 
 Secondly, you minimize the chance of mistakes. The preservation of a perfect record is a strong motivator for anyone with accountability over performance.
 
-For the enlightened few who do operate courageously above the line, there's constantly pressure to drop back down below the line. Because of the vicious cycle that initiates once tragedy strikes. Like so 👇
+For the enlightened few who do operate courageously by giving their teams full autonomy to perform, there's constantly pressure to drop back down below the line. Because of the vicious cycle that initiates once tragedy strikes. 
 
 The knee jerk reaction to any mistake, is to tighten control. Decisions are moved further and further away from the people that are carrying out the work, to people in leadership positions. Leaders then become bottlenecks or spend inordinate amounts of their time trying to understand and control everything. Meanwhile, the people who are supposed to be doing actual work, are instead spending most of their time explaining and justifying their work.
 
