@@ -1,12 +1,14 @@
 ---
 interface Props {
   currentPath?: string;
+  tocItems?: Array<{ slug: string; text: string }>;
 }
-const { currentPath = '/' } = Astro.props;
+const { currentPath = '/', tocItems = [] } = Astro.props;
 const isHome = currentPath === '/';
+const showTocInDrawer = tocItems.length > 0;
 ---
 
-<nav>
+<nav id="site-nav">
   <a href="/" class="nav-logo">Lisa Chan</a>
 
   <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
@@ -40,7 +42,15 @@ const isHome = currentPath === '/';
 
 <div class="nav-drawer" id="nav-drawer">
   <ul>
-    {isHome ? (
+    {showTocInDrawer ? (
+      tocItems.map(item => (
+        <li>
+          <a href={`#${item.slug}`} class="toc-nav-link" data-slug={item.slug}>
+            {item.text}
+          </a>
+        </li>
+      ))
+    ) : isHome ? (
       <>
         <li><a href="#about">About</a></li>
         <li><a href="#experience">Experience</a></li>
@@ -63,16 +73,17 @@ const isHome = currentPath === '/';
 </div>
 
 <script>
+  const nav = document.getElementById('site-nav') as HTMLElement;
   const hamburger = document.getElementById('hamburger');
   const drawer = document.getElementById('nav-drawer');
 
+  // ── Hamburger toggle ──────────────────────────────────────
   hamburger?.addEventListener('click', () => {
     const isOpen = drawer?.classList.toggle('open');
     hamburger.classList.toggle('open');
     hamburger.setAttribute('aria-expanded', String(isOpen));
   });
 
-  // Close drawer when a link is tapped
   drawer?.querySelectorAll('a').forEach(link => {
     link.addEventListener('click', () => {
       drawer.classList.remove('open');
@@ -80,6 +91,28 @@ const isHome = currentPath === '/';
       hamburger?.setAttribute('aria-expanded', 'false');
     });
   });
+
+  // ── Scroll-hide / scroll-show ─────────────────────────────
+  let lastY = window.scrollY;
+
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    const goingDown = y > lastY && y > 80;
+
+    if (goingDown) {
+      nav.style.transform = 'translateY(-100%)';
+      // Close drawer if open
+      if (drawer?.classList.contains('open')) {
+        drawer.classList.remove('open');
+        hamburger?.classList.remove('open');
+        hamburger?.setAttribute('aria-expanded', 'false');
+      }
+    } else {
+      nav.style.transform = '';
+    }
+
+    lastY = y;
+  }, { passive: true });
 </script>
 
 <style>
@@ -95,6 +128,7 @@ const isHome = currentPath === '/';
     justify-content: space-between;
     padding: 0 var(--site-padding);
     z-index: 100;
+    transition: transform 0.3s ease;
   }
 
   .nav-logo {
@@ -174,7 +208,7 @@ const isHome = currentPath === '/';
     display: none;
   }
 
-  .nav-drawer.open { max-height: 320px; }
+  .nav-drawer.open { max-height: 400px; }
 
   .nav-drawer ul {
     list-style: none;
@@ -193,6 +227,18 @@ const isHome = currentPath === '/';
   }
 
   .nav-drawer li a:hover { color: var(--terracotta); }
+
+  /* TOC links in drawer — slightly different treatment */
+  .nav-drawer li a.toc-nav-link {
+    letter-spacing: 0.01em;
+    text-transform: none;
+    font-size: 0.9375rem;
+  }
+
+  :global(.toc-nav-link.active) {
+    color: var(--terracotta) !important;
+    font-weight: 500;
+  }
 
   /* Mobile breakpoint */
   @media (max-width: 640px) {

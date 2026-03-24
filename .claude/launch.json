@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "lisachan-website",
+      "runtimeExecutable": "C:/nvm4w/nodejs/node",
+      "runtimeArgs": ["node_modules/astro/bin/astro.mjs", "dev"],
+      "port": 4321
+    }
+  ]
+}

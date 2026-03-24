@@ -67,7 +67,7 @@ body {
 }
 
 .post-body p + p { margin-top: 1.25rem; }
-.post-body h2 { font-family: var(--serif); font-size: 1.5rem; margin: 2.5rem 0 1rem; }
+.post-body h2 { font-family: var(--serif); font-size: 1.5rem; margin: 2.5rem 0 1rem; scroll-margin-top: calc(var(--nav-height) + 1.5rem); }
 .post-body h3 { font-family: var(--serif); font-size: 1.25rem; margin: 2rem 0 0.75rem; }
 .post-body ul, .post-body ol { padding-left: 1.5rem; margin: 1rem 0; }
 .post-body li + li { margin-top: 0.4rem; }

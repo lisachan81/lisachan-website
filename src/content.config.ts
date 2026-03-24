@@ -8,6 +8,13 @@ const writing = defineCollection({
     title: z.string(),
     date: z.date(),
     excerpt: z.string(),
+    toc: z.boolean().optional(),
+    furtherReading: z.array(z.object({
+      title: z.string(),
+      author: z.string(),
+      year: z.string(),
+      note: z.string(),
+    })).optional(),
   }),
 });
 
