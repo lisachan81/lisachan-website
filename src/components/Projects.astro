@@ -1,0 +1,85 @@
+---
+const projects = [
+  {
+    title: 'Life in weeks',
+    description: 'A meditation on time. Enter your birth date and see your entire life laid out as a grid of weeks.',
+    url: '/projects/life-in-weeks',
+    year: '2026',
+  },
+];
+---
+
+<section id="projects">
+  <div class="section-inner">
+    <p class="section-label">Projects</p>
+    <h2 class="section-heading">Things I've built for fun.</h2>
+    <div class="list">
+      {projects.map(project => (
+        <a href={project.url} class="item">
+          <span class="detail">
+            <span class="title">{project.title}</span>
+            <span class="desc">{project.description}</span>
+          </span>
+          <span class="arrow">→</span>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .list { display: flex; flex-direction: column; }
+
+  .item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: 1.75rem 0;
+    border-top: 1px solid var(--ink-faint);
+    text-decoration: none;
+    color: var(--ink);
+    transition: color 0.2s;
+  }
+
+  .item:last-child { border-bottom: 1px solid var(--ink-faint); }
+
+  .detail {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .title {
+    font-family: var(--serif);
+    font-size: 1.125rem;
+    font-weight: 600;
+    line-height: 1.3;
+    transition: color 0.2s;
+  }
+
+  .item:hover .title { color: var(--terracotta); }
+
+  .desc {
+    font-size: 0.875rem;
+    color: var(--ink-muted);
+    line-height: 1.6;
+    max-width: 560px;
+  }
+
+  .arrow {
+    font-size: 1.25rem;
+    color: var(--ink-muted);
+    flex-shrink: 0;
+    transition: color 0.2s, transform 0.2s;
+  }
+
+  .item:hover .arrow {
+    color: var(--terracotta);
+    transform: translateX(4px);
+  }
+
+  @media (max-width: 480px) {
+    .arrow { display: none; }
+  }
+</style>

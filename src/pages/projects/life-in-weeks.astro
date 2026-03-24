@@ -1,0 +1,469 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Nav from '../../components/Nav.astro';
+---
+
+<BaseLayout
+  title="Life in weeks — Lisa Chan"
+  description="A meditation on time. Enter your birth date and see your entire life laid out as a grid of weeks."
+>
+  <Nav currentPath="/projects/life-in-weeks" />
+
+  <main>
+    <!-- Step 1: input -->
+    <section id="step-input" class="step">
+      <div class="input-inner">
+        <a href="/#projects" class="back">← Projects</a>
+        <p class="section-label">Pet project</p>
+        <h1 class="heading">Your life in weeks.</h1>
+        <p class="subtext">
+          A record of every week you have lived — and every week still ahead.
+        </p>
+        <form id="birth-form">
+          <label for="birthdate">Date of birth</label>
+          <input type="date" id="birthdate" name="birthdate" required />
+          <button type="submit">See my weeks →</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- Step 2: grid -->
+    <section id="step-grid" class="step hidden">
+      <div class="grid-inner">
+        <button id="reset-btn" class="reset">← Start over</button>
+
+        <h2 class="grid-heading">Your life in weeks.</h2>
+        <p class="grid-subtext">A record of every week you have lived — and every week still ahead.</p>
+
+        <div class="grid-wrap">
+          <div id="week-grid" class="week-grid"></div>
+        </div>
+
+        <p class="grid-key">Each row is one year &nbsp;·&nbsp; each square is one week &nbsp;·&nbsp; <span class="key-lived">filled</span> = lived</p>
+
+        <div id="stats" class="stats"></div>
+
+        <div id="perspectives" class="perspectives"></div>
+
+        <p class="footnote">Inspired by Dieter Rams.</p>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<script>
+  const YEARS = 90;
+  const WEEKS_PER_YEAR = 52;
+  const TOTAL_WEEKS = YEARS * WEEKS_PER_YEAR; // 4,680
+
+  const form = document.getElementById('birth-form') as HTMLFormElement;
+  const stepInput = document.getElementById('step-input')!;
+  const stepGrid = document.getElementById('step-grid')!;
+  const resetBtn = document.getElementById('reset-btn')!;
+  const birthdateInput = document.getElementById('birthdate') as HTMLInputElement;
+
+  // Prevent future dates
+  birthdateInput.setAttribute('max', new Date().toISOString().split('T')[0]);
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const [y, m, d] = birthdateInput.value.split('-').map(Number);
+    const birthDate = new Date(y, m - 1, d);
+    if (isNaN(birthDate.getTime())) return;
+
+    render(birthDate);
+    stepInput.classList.add('hidden');
+    stepGrid.classList.remove('hidden');
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  });
+
+  resetBtn.addEventListener('click', () => {
+    stepGrid.classList.add('hidden');
+    stepInput.classList.remove('hidden');
+  });
+
+  function formatTinyPct(numerator: number, denominator: number): string {
+    const pct = (numerator / denominator) * 100;
+    if (pct === 0) return '0%';
+    // Find enough decimal places to show 3 significant figures
+    const magnitude = Math.floor(Math.log10(pct));
+    const decimalPlaces = Math.max(0, -magnitude + 2);
+    return pct.toFixed(decimalPlaces) + '%';
+  }
+
+  function roundedAge(ageInYears: number): number {
+    return Math.round(ageInYears);
+  }
+
+  function formatHeartbeats(n: number): string {
+    if (n >= 1_000_000_000) {
+      return (n / 1_000_000_000).toFixed(2) + ' billion';
+    }
+    return n.toLocaleString();
+  }
+
+  function render(birthDate: Date) {
+    const now = new Date();
+    const MS_PER_WEEK = 7 * 24 * 60 * 60 * 1000;
+    const weeksLived = Math.min(
+      Math.floor((now.getTime() - birthDate.getTime()) / MS_PER_WEEK),
+      TOTAL_WEEKS
+    );
+
+    // Build grid
+    const grid = document.getElementById('week-grid')!;
+    grid.innerHTML = '';
+    const fragment = document.createDocumentFragment();
+    for (let i = 0; i < TOTAL_WEEKS; i++) {
+      const cell = document.createElement('span');
+      cell.className = i < weeksLived ? 'cell lived' : 'cell future';
+      fragment.appendChild(cell);
+    }
+    grid.appendChild(fragment);
+
+    // Derived values
+    const weeksAhead = Math.max(TOTAL_WEEKS - weeksLived, 0);
+    const pct = ((weeksLived / TOTAL_WEEKS) * 100).toFixed(1);
+    const msLived = now.getTime() - birthDate.getTime();
+    const daysLived = Math.floor(msLived / (24 * 60 * 60 * 1000));
+    const seasonsLived = Math.floor(daysLived / 91.25);
+    const ageInYears = msLived / (365.25 * 24 * 60 * 60 * 1000);
+    const heartbeats = Math.round(daysLived * 24 * 60 * 70);
+
+    // Personal stats
+    const statsEl = document.getElementById('stats')!;
+    statsEl.innerHTML = `
+      <div class="stat">
+        <span class="stat-num">${weeksLived.toLocaleString()}</span>
+        <span class="stat-label">Weeks lived</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">${weeksAhead.toLocaleString()}</span>
+        <span class="stat-label">Weeks still ahead</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">${pct}%</span>
+        <span class="stat-label">Of a 90-year life</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">${daysLived.toLocaleString()}</span>
+        <span class="stat-label">Days on this earth</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">${seasonsLived}</span>
+        <span class="stat-label">Seasons experienced</span>
+      </div>
+    `;
+
+    // Perspective sections
+    const universePct = formatTinyPct(ageInYears, 13_800_000_000);
+    const tamanNegaraPct = formatTinyPct(ageInYears, 130_000_000);
+    const heartbeatsFmt = formatHeartbeats(heartbeats);
+
+    const perspectivesEl = document.getElementById('perspectives')!;
+    const lightYears = roundedAge(ageInYears);
+
+    perspectivesEl.innerHTML = `
+      <div class="perspective-block">
+        <p class="perspective-label">Cosmic scale</p>
+        <div class="perspective-facts">
+          <p class="perspective-fact">The universe is 13.8 billion years old. Your lifetime so far is <em>${universePct}</em> of that.</p>
+          <p class="perspective-fact">Light from a star <em>${lightYears}</em> light-years away set off the day you were born. It is only just reaching Earth now.</p>
+        </div>
+      </div>
+      <div class="perspective-block">
+        <p class="perspective-label">Natural world</p>
+        <div class="perspective-facts">
+          <p class="perspective-fact">The Taman Negara rainforest in Malaysia has existed for approximately 130 million years — long before the first humans walked the earth. Your life so far is <em>${tamanNegaraPct}</em> of its age.</p>
+          <p class="perspective-fact">Your heart has beaten approximately <em>${heartbeatsFmt}</em> times since you were born. Each beat unremarkable. Each beat irreplaceable.</p>
+        </div>
+      </div>
+    `;
+  }
+</script>
+
+<!-- Scoped styles: static elements only -->
+<style>
+  main {
+    padding-top: var(--nav-height);
+    min-height: 100vh;
+  }
+
+  .step { width: 100%; }
+  .hidden { display: none !important; }
+
+  /* ── Step 1: input ── */
+  .input-inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: clamp(4rem, 10vw, 8rem) var(--site-padding);
+    min-height: calc(100vh - var(--nav-height));
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .back {
+    display: inline-block;
+    font-size: 0.8125rem;
+    color: var(--ink-muted);
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    margin-bottom: 2.5rem;
+    transition: color 0.2s;
+  }
+  .back:hover { color: var(--terracotta); }
+
+  .heading {
+    font-family: var(--serif);
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    color: var(--ink);
+    margin: 0.5rem 0 1.25rem;
+  }
+
+  .subtext {
+    font-size: clamp(1rem, 2vw, 1.125rem);
+    color: var(--ink-muted);
+    line-height: 1.7;
+    max-width: 480px;
+    margin-bottom: 3rem;
+    font-weight: 300;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.25rem;
+  }
+
+  label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+
+  input[type="date"] {
+    appearance: none;
+    -webkit-appearance: none;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--ink);
+    padding: 0.5rem 0;
+    font-family: var(--sans);
+    font-size: 1.0625rem;
+    font-weight: 300;
+    color: var(--ink);
+    width: 220px;
+    cursor: pointer;
+    border-radius: 0;
+  }
+  input[type="date"]:focus {
+    outline: none;
+    border-bottom-color: var(--terracotta);
+  }
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    opacity: 0.4;
+    cursor: pointer;
+  }
+
+  button[type="submit"] {
+    background: var(--ink);
+    color: var(--cream);
+    border: none;
+    padding: 0.875rem 2.25rem;
+    font-family: var(--sans);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-top: 0.5rem;
+  }
+  button[type="submit"]:hover { background: var(--terracotta); }
+
+  /* ── Step 2: grid ── */
+  .grid-inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: clamp(3rem, 8vw, 6rem) var(--site-padding);
+  }
+
+  .reset {
+    background: none;
+    border: none;
+    font-family: var(--sans);
+    font-size: 0.8125rem;
+    color: var(--ink-muted);
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    padding: 0;
+    margin-bottom: 3rem;
+    transition: color 0.2s;
+  }
+  .reset:hover { color: var(--terracotta); }
+
+  .grid-heading {
+    font-family: var(--serif);
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    color: var(--ink);
+    margin: 0 0 0.75rem;
+  }
+
+  .grid-subtext {
+    font-size: clamp(0.9375rem, 1.75vw, 1.0625rem);
+    color: var(--ink-muted);
+    font-weight: 300;
+    line-height: 1.6;
+    margin-bottom: 3rem;
+    max-width: 520px;
+  }
+
+  .grid-wrap {
+    width: 100%;
+    margin-bottom: 1.25rem;
+  }
+
+  .week-grid {
+    display: grid;
+    grid-template-columns: repeat(52, 1fr);
+    gap: clamp(1px, 0.25vw, 2px);
+    width: 100%;
+  }
+
+  .grid-key {
+    font-size: 0.75rem;
+    color: var(--ink-muted);
+    margin-bottom: 3.5rem;
+    letter-spacing: 0.03em;
+  }
+
+  .key-lived {
+    color: var(--terracotta);
+  }
+
+  /* Footnote */
+  .footnote {
+    font-size: 0.75rem;
+    color: var(--ink-muted);
+    border-top: 1px solid var(--ink-faint);
+    padding-top: 1.5rem;
+    letter-spacing: 0.02em;
+  }
+
+  /* Mobile */
+  @media (max-width: 480px) {
+    .grid-heading { margin-bottom: 0.5rem; }
+  }
+</style>
+
+<!-- Global styles: dynamically created elements (cells, stats, perspectives) -->
+<style is:global>
+  /* Grid cells */
+  .cell {
+    aspect-ratio: 1;
+    border-radius: 1px;
+  }
+  .cell.lived { background: var(--terracotta); }
+  .cell.future { background: var(--ink-faint); }
+
+  /* Personal stats */
+  .stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 3rem;
+    margin-bottom: 4rem;
+    border-top: 1px solid var(--ink-faint);
+    padding-top: 2.5rem;
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    min-width: 120px;
+  }
+
+  .stat-num {
+    font-family: var(--serif);
+    font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+
+  /* Perspective sections */
+  .perspectives {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-bottom: 4rem;
+  }
+
+  .perspective-block {
+    border-top: 1px solid var(--ink-faint);
+    padding: 2.5rem 0;
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 1.5rem 3rem;
+    align-items: start;
+  }
+
+  .perspective-label {
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    padding-top: 0.2rem;
+  }
+
+  .perspective-facts {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .perspective-fact {
+    font-size: clamp(0.9rem, 1.5vw, 1rem);
+    color: var(--ink-muted);
+    line-height: 1.75;
+    font-weight: 300;
+    margin: 0;
+  }
+
+  .perspective-fact em {
+    font-style: normal;
+    color: var(--ink);
+    font-weight: 400;
+  }
+
+  /* Mobile */
+  @media (max-width: 600px) {
+    .stats { gap: 0.5rem 2rem; }
+    .stat { min-width: 100px; }
+
+    .perspective-block {
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
+  }
+</style>
